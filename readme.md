@@ -6,6 +6,8 @@ Repositorio com fins educacionais
 ## Instalacão
 
 Utiilze o yarn para instalar as dependencias.
+Crie um banco de dados de nome clinica
+Rode as migracoes yarn sequelize db:migrate
 
 ```bash
 yarn install
