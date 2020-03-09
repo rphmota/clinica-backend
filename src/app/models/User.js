@@ -7,7 +7,11 @@
  * Os campos aqui declarados nao precisao ser um refletoda base de dados o campos password 
  * e do tipo virtual e ele nao existe  na base
  * A o hook e uma funcionalidade do seqelize que nada mais e que um trecho de codigo
- * que e executado antes de alguma acao beforeSave,beforeUpdate...
+ * que e executado antes de alguma acao beforeSave,beforeUpdate... 
+ * O metodo checkPassword dessa classe compara atraves do bcrypt a senha do objeto instanciado com 
+ * uma senha passada por parametro retorna um booleano obs: o bcrypt.compare e assincrono
+ * entao atentar para seu uso a necessidade do await
+ * 
  */
 const { Model } = require('sequelize')
 const Sequelize = require('sequelize')
@@ -35,6 +39,9 @@ class User extends Model {
         })
         return this
     }
+        checkPassword(password) {
+            return bcrypt.compare(password,this.password_hash)
+        }
 }
 
 module.exports = User
