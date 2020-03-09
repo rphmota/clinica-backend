@@ -1,18 +1,13 @@
+/**
+ * Primeiramente importo apenas o routes do express depois instancio um objeto do tipo Router
+ * para ser utilizado no app.js (separando modulos)
+ * Importo o User controller para atribuir uma rota ao metodo da controller que eu desejar
+ */
 const { Router } = require('express')
-const User = require('./app/models/User')
+const UserController = require('./app/controllers/UserController')
 
 const routes = new Router()
 
-routes.get('/',async (req,res) => {
-    const user = await User.create({
-        name: "Raphael Mota",
-        email: "rphmota@gmail.com",
-        password_hash: "010203",
-        access_level: 'A',
-        cpf: '02233372344',
-        phone: '85981091897'
-    })
-    return res.json(user)
-})
+routes.post('/users',UserController.save)
  
 module.exports = routes
