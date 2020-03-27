@@ -36,7 +36,7 @@ const User = require('../models/User')
              name,
              cpf
              },
-             token: jwt.sign({id,cpf},Auth.secret,{
+             token: jwt.sign({id},Auth.secret,{
                 expiresIn: Auth.expiresIn
              }),
              menssagem: "Bem vindo ao back-end"

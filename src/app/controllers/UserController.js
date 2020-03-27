@@ -25,6 +25,31 @@ class UserController {
                 access_level})
         }
     }
+    async edit(req,res) {
+       const {cpf,oldPassword} = req.body
+
+       const user = await User.findByPk(req.userId)
+
+       if(cpf!=user.cpf) {
+           const userExists = await user.findOne({where: {cpf}})
+
+           if(userExists) {
+            return   res.status(400).json({error: "Usuario ja existe"})
+           }
+       }
+       if(oldPassword && !(await user.checkPassword(oldPassword))) {
+           return   res.status(401).json({error: "Senha nao confere"}) 
+       }
+
+       const {id,name,access_level,cpf} = await user.update(req.body)
+
+       return res.status(200).json({
+           id,
+           name,
+           cpf,
+           access_level
+       })
+    }
 
 }
 module.exports = new UserController()
