@@ -18,9 +18,9 @@ const User = require('../models/User')
 
  class SessionController {
      async save(req,res) {
-         const {cpf,password} = req.body
+         const {login,password} = req.body
 
-         const user = await User.findOne({where: {cpf: cpf}})
+         const user = await User.findOne({where: {cpf: login}})
          if(!user) {
             return res.status(401).json({error: 'Usuario nao encontrado'})
          }
@@ -28,15 +28,16 @@ const User = require('../models/User')
             return res.status(401).json({error: 'Senha invalida'})
          }
 
-         const {id,name} = user
+         const {id,name,cpf,access_level} = user         
 
          return res.status(200).json({
              user: {
              id,
              name,
-             cpf
+             cpf,
+             access_level
              },
-             token: jwt.sign({id},Auth.secret,{
+             token: jwt.sign({id,cpf,access_level},Auth.secret,{
                 expiresIn: Auth.expiresIn
              }),
              menssagem: "Bem vindo ao back-end"
