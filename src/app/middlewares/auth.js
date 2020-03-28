@@ -26,12 +26,14 @@ const authConfig = require('../../config/auth')
     }
     const [,token] = authHeader.split(' ')
     try {
-        //Valor retornado do jwt verify
         
+        //Valor retornado do jwt verify        
         const decoded = await promisify(jwt.verify)(token,authConfig.secret)
-        req.userId = decoded.id
+        req.userId_token = decoded.id     
+        req.level_token = decoded.access_level      
+        req.cpf_token = decoded.cpf      
         
-        console.log(req.userId);        
+          
         return next();            
     } catch (error) {
         return res.status(401).json({error: "Token Invalido!!"})
