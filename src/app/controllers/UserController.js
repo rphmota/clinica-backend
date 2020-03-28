@@ -7,32 +7,29 @@
  * Quando de fato eu cadastro um usuario na base seria melhor retornar para o front apenas alguns dados desse usuario cadastrado
  * portando o retorno do create apenas algumas informacoes estao vindo do retorno
  */
-const User = require('../models/User')
+const Yup = require('yup')
+ const User = require('../models/User')
 class UserController {
-    async save(req,res) {
-        const emailExists = await User.findOne({where:{email: req.body.email}})
+    async save(req,res) {        
         const cpfExists = await User.findOne({where: {cpf: req.body.cpf}})        
-        if(emailExists) {
-            return res.status(400).json({Msg: 'E-MAIL ja cadastrado na base de dados'})
-        } if(cpfExists) {
-            return res.status(400).json({Msg: 'CPF  ja cadastrado na base de dados'})
+        if(cpfExists) {
+            return res.status(400).json({Msg: 'CPF ja cadastrado na base de dados'})
         } else {
-            const {id,name,email,access_level} = await User.create(req.body)
-            return res.json({
-                id,
+            const {name,access_level,cpf} = await User.create(req.body)
+            return res.json({                
+                menssagem: 'Usuario cadastrado com sucesso',
                 name,
-                email,
+                cpf,                
                 access_level})
         }
     }
     async edit(req,res) {
-       const {cpf,oldPassword} = req.body
+       const {login,oldPassword} = req.body
 
-       const user = await User.findByPk(req.userId)
+       const user = await User.findByPk(req.userId_token)
 
-       if(cpf!=user.cpf) {
-           const userExists = await user.findOne({where: {cpf}})
-
+       if(login!=user.cpf) {
+           const userExists = await User.findOne({where: {cpf: login}})
            if(userExists) {
             return   res.status(400).json({error: "Usuario ja existe"})
            }
@@ -41,14 +38,17 @@ class UserController {
            return   res.status(401).json({error: "Senha nao confere"}) 
        }
 
-       const {id,name,access_level,cpf} = await user.update(req.body)
+       const {id,name,cpf,access_level} = await user.update(req.body)
 
-       return res.status(200).json({
-           id,
-           name,
-           cpf,
-           access_level
-       })
+       return res.status(200).json(
+            {
+                menssagem: "Usuario Atualizado com sucesso",
+                id,
+                name,
+                cpf,
+                access_level
+            }
+            )
     }
 
 }
