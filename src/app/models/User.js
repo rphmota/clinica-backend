@@ -21,13 +21,11 @@ class User extends Model {
     static init(sequelize){
         super.init(
         {
-            name: Sequelize.STRING,
-            email: Sequelize.STRING,
+            name: Sequelize.STRING,            
             password: Sequelize.VIRTUAL,
             password_hash: Sequelize.STRING,
             access_level: Sequelize.STRING(1),
-            cpf: Sequelize.INTEGER,
-            phone: Sequelize.INTEGER            
+            cpf: Sequelize.INTEGER            
         },
         {
              sequelize,             
@@ -43,5 +41,4 @@ class User extends Model {
             return bcrypt.compare(password,this.password_hash)
         }
 }
-
 module.exports = User
