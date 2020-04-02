@@ -12,6 +12,7 @@ const SessionController = require('./app/controllers/SessionController')
 const routes = new Router()
 
 routes.post('/users',UserController.save)
+routes.get('/users',UserController.list)
 
 routes.post('/sigin',SessionController.save)
 routes.put('/users',AuthMiddleware,UserController.edit)
