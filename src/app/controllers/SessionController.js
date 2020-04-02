@@ -15,9 +15,20 @@
 const jwt = require('jsonwebtoken')
 const Auth = require('../../config/auth')
 const User = require('../models/User')
+const Yup = require('yup')
 
  class SessionController {
      async save(req,res) {
+
+        const schema = Yup.object().shape({
+            login: Yup.string().required(),
+            password: Yup.string().required()                
+        }) 
+
+        if(!(await schema.isValid(req.body))) {
+            res.status(400).json({erro: 'falha na validacao'})
+        }
+
          const {login,password} = req.body
 
          const user = await User.findOne({where: {cpf: login}})
